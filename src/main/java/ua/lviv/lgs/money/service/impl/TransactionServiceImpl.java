@@ -2,6 +2,7 @@ package ua.lviv.lgs.money.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.lviv.lgs.money.domain.MoneyAccount;
@@ -48,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Page<Transaction> findByAccountId(Long accountId, Type type) {
-        return null;
+    public Page<Transaction> findByAccountId(Long accountId, Type type, Pageable pageable) {
+        return transactionRepository.findByMoneyAccountIdAndType(accountId, type, pageable);
     }
 }

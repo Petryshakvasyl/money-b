@@ -21,6 +21,7 @@ public class Transaction {
     private Long id;
 
     private BigDecimal amount;
+
     private Instant date;
 
     private String description;
@@ -30,5 +31,8 @@ public class Transaction {
 
     @OneToOne
     private Category category;
+
+    @ManyToOne
+    private MoneyAccount moneyAccount;
 
 }
