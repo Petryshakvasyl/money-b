@@ -41,7 +41,7 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
     @Email

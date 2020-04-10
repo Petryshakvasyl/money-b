@@ -10,4 +10,6 @@ public interface UserService {
     void setCurrentAccount(Long userId, MoneyAccount moneyAccount);
 
     void registerNewUser(User user);
+
+    void confirmRegistration(String token);
 }

@@ -7,12 +7,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.lviv.lgs.money.controller.validator.UserValidator;
 import ua.lviv.lgs.money.domain.User;
 import ua.lviv.lgs.money.service.UserService;
 import ua.lviv.lgs.money.service.event.RegisterUserEvent;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -37,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/registration")
-    public String registrationPage(Model model) {
+    public String registrationPage(Model model, Principal principal) {
         model.addAttribute("userForm", new User());
         return "registration";
     }
@@ -50,6 +52,13 @@ public class UserController {
         }
         userService.registerNewUser(user);
         eventPublisher.publishEvent(new RegisterUserEvent(this, user, request.getContextPath()));
+        return "redirect:/login";
+    }
+
+    @GetMapping("/confirmRegistration")
+    public String confirmRegistration(@RequestParam String token) {
+
+        userService.confirmRegistration(token);
         return "redirect:/login";
     }
 }

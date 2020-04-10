@@ -5,12 +5,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.lviv.lgs.money.domain.MoneyAccount;
 import ua.lviv.lgs.money.domain.User;
+import ua.lviv.lgs.money.domain.VerificationToken;
 import ua.lviv.lgs.money.repository.MoneyAccountRepository;
 import ua.lviv.lgs.money.repository.RoleRepository;
 import ua.lviv.lgs.money.repository.UserRepository;
+import ua.lviv.lgs.money.repository.VerificationTokenRepository;
 import ua.lviv.lgs.money.service.UserService;
 import ua.lviv.lgs.money.service.exceptions.EntityNotFoundException;
 import ua.lviv.lgs.money.service.exceptions.UserAlreadyExistException;
+
+import java.time.Duration;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     private final BCryptPasswordEncoder passwordEncoder;
+
+    private final VerificationTokenRepository tokenRepository;
 
     @Override
     public User save(User user) {
@@ -49,5 +56,21 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(roleRepository.findByName("ROLE_USER"));
         userRepository.save(user);
+    }
+
+
+    @Override
+    public void confirmRegistration(String token) {
+        VerificationToken tokenPersisted = tokenRepository.findByToken(token);
+        if (tokenPersisted != null && tokenIsValid(tokenPersisted)) {
+            User user = tokenPersisted.getUser();
+            user.setEnabled(true);
+            userRepository.save(user);
+        }
+
+    }
+
+    private boolean tokenIsValid(VerificationToken token) {
+        return Duration.between(token.getExpiredDate(), Instant.now()).isNegative();
     }
 }
