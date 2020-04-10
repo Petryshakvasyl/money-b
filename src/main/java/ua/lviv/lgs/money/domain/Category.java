@@ -5,9 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import ua.lviv.lgs.money.domain.enumeration.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -23,6 +21,7 @@ public class Category {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private Type type;
 
 }
