@@ -39,7 +39,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         user.setLastName("Snow");
         user.setUsername("jonsnow");
 
-        userService.create(user);
+        userService.save(user);
 
         Currency currency = new Currency();
         currency.setCode("UAH");

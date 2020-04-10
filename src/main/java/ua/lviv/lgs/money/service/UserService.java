@@ -5,8 +5,9 @@ import ua.lviv.lgs.money.domain.User;
 
 public interface UserService {
 
-    User create(User user);
+    User save(User user);
 
     void setCurrentAccount(Long userId, MoneyAccount moneyAccount);
 
+    void registerNewUser(User user);
 }
