@@ -4,10 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ua.lviv.lgs.money.domain.Transaction;
 import ua.lviv.lgs.money.domain.enumeration.Type;
+import ua.lviv.lgs.money.service.dto.TransactionDTO;
 
 public interface TransactionService {
 
-    Transaction create(Long userId, Transaction transaction);
+    TransactionDTO create(Long userId, TransactionDTO transaction);
 
     Transaction update(Transaction transaction);
 

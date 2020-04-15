@@ -17,11 +17,12 @@ public class SecirutyConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/resources/**", "/registration", "/confirmRegistration").permitAll()
+                .antMatchers("/resources/**", "/registration", "/confirmRegistration", "/success.jsp").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/")
                 .permitAll()
                 .and()
                 .logout()

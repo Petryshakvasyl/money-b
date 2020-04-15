@@ -13,6 +13,7 @@ import ua.lviv.lgs.money.repository.VerificationTokenRepository;
 import ua.lviv.lgs.money.service.UserService;
 import ua.lviv.lgs.money.service.exceptions.EntityNotFoundException;
 import ua.lviv.lgs.money.service.exceptions.UserAlreadyExistException;
+import ua.lviv.lgs.money.utils.SecurityUtils;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -72,5 +73,20 @@ public class UserServiceImpl implements UserService {
 
     private boolean tokenIsValid(VerificationToken token) {
         return Duration.between(token.getExpiredDate(), Instant.now()).isNegative();
+    }
+
+    @Override
+    public Long findCurrentUserId() {
+        return userRepository.findByUsername(SecurityUtils.getCurrentUserName()).get().getId();
+    }
+
+    @Override
+    public Long findUserCurrentAccountId() {
+        return userRepository.findByUsername(SecurityUtils.getCurrentUserName()).get().getCurrentAccount().getId();
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("" + id));
     }
 }

@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "transactions")
 
 @Entity
 public class MoneyAccount {

@@ -7,4 +7,5 @@ import ua.lviv.lgs.money.domain.MoneyAccount;
 @Repository
 public interface MoneyAccountRepository extends JpaRepository<MoneyAccount, Long> {
 
+
 }

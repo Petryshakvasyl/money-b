@@ -12,4 +12,10 @@ public interface UserService {
     void registerNewUser(User user);
 
     void confirmRegistration(String token);
+
+    Long findCurrentUserId();
+
+    Long findUserCurrentAccountId();
+
+    User findById(Long id);
 }
