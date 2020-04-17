@@ -1,6 +1,7 @@
 package ua.lviv.lgs.money.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.lviv.lgs.money.domain.MoneyAccount;
@@ -20,6 +21,7 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -28,7 +30,6 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
 
     private final VerificationTokenRepository tokenRepository;
 
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException();
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.getRoles().add(roleRepository.findByName("ROLE_USER"));
         userRepository.save(user);
     }
@@ -82,6 +83,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long findUserCurrentAccountId() {
+        log.info("find user current account id");
         return userRepository.findByUsername(SecurityUtils.getCurrentUserName()).get().getCurrentAccount().getId();
     }
 

@@ -5,21 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.lviv.lgs.money.domain.MoneyAccount;
 import ua.lviv.lgs.money.domain.Transaction;
-import ua.lviv.lgs.money.domain.User;
 import ua.lviv.lgs.money.domain.enumeration.Type;
 import ua.lviv.lgs.money.repository.MoneyAccountRepository;
 import ua.lviv.lgs.money.repository.TransactionRepository;
 import ua.lviv.lgs.money.repository.UserRepository;
 import ua.lviv.lgs.money.service.TransactionService;
 import ua.lviv.lgs.money.service.dto.TransactionDTO;
-import ua.lviv.lgs.money.service.exceptions.EntityNotFoundException;
 import ua.lviv.lgs.money.service.mapper.TransactionMapper;
 
 @Service
-@Profile("dev")
-public class TransactionServiceImpl implements TransactionService {
+@Profile("test")
+public class TransactionTestServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
 
@@ -29,7 +26,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionMapper transactionMapper;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository, UserRepository userRepository, MoneyAccountRepository moneyAccountRepository, TransactionMapper transactionMapper) {
+    public TransactionTestServiceImpl(TransactionRepository transactionRepository, UserRepository userRepository, MoneyAccountRepository moneyAccountRepository, TransactionMapper transactionMapper) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.moneyAccountRepository = moneyAccountRepository;
@@ -39,14 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public TransactionDTO create(Long userId, TransactionDTO transactionDTO) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("user with id " + userId + " was not found"));
-        MoneyAccount currentMoneyAccount = user.getCurrentAccount();
-        Transaction transaction = transactionMapper.toEntity(transactionDTO);
-        transactionRepository.save(transaction);
-        currentMoneyAccount.getTransactions().add(transaction);
-        moneyAccountRepository.save(currentMoneyAccount);
-        return transactionMapper.toDTO(transaction);
+        return new TransactionDTO();
     }
 
     @Override

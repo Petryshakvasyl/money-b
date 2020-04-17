@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ua.lviv.lgs.money.domain.Transaction;
 import ua.lviv.lgs.money.domain.enumeration.Type;
 import ua.lviv.lgs.money.service.CategoryService;
@@ -29,6 +30,7 @@ public class TransactionController {
 
     @GetMapping("/transactions/income")
     public String getIncomePage(Model model, Pageable pageable) {
+        log.info("in comtroller");
         Page<Transaction> transactionPage = transactionService.findByAccountId(userService.findUserCurrentAccountId(),
                 Type.INCOME, pageable);
         model.addAttribute("incomePage", transactionPage);
@@ -45,7 +47,7 @@ public class TransactionController {
 
     @PostMapping("/transactions")
     public TransactionDTO createTransaction(@RequestBody TransactionDTO transaction) {
-        log.info("create transacition");
+        log.info("create transaction");
         return transactionService.create(userService.findCurrentUserId(), transaction);
     }
 
@@ -54,4 +56,13 @@ public class TransactionController {
         model.addAttribute("categories", categoryService.findAll());
         return "create-income";
     }
+
+
+    @GetMapping("files")
+    public @ResponseBody
+    byte[] getFIle() {
+        return new byte[]{1, 2, 3, 4};
+    }
+
+
 }
